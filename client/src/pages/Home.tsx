@@ -103,7 +103,7 @@ const copy: Record<Locale, Copy> = {
     store: "متجر ميلانو",
     online: "متصل الآن",
     welcome: "نظـام ميلانو المحاسبي",
-    welcomeSub: "إليك نظرة سريعة على أداء متجرك اليوم.",
+    welcomeSub: "إليك نظرة سريعة على أداء نظام ميلانو اليوم.",
     today: "اليوم، 16 سبتمبر 2026",
     addProduct: "إضافة منتج",
     totalSales: "إجمالي المبيعات",
