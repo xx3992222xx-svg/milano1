@@ -25,6 +25,7 @@ import {
   Languages,
   LayoutDashboard,
   Link2,
+  LogOut,
   Menu,
   MessageCircle,
   MessageSquareText,
@@ -97,6 +98,7 @@ const copy: Record<Locale, Copy> = {
     systemSettings: "إعدادات النظام",
     social: "التواصل الاجتماعي",
     footerSettings: "إعدادات التذييل",
+    logout: "تسجيل الخروج",
     help: "مركز المساعدة",
     store: "متجر ميلانو",
     online: "متصل الآن",
@@ -203,6 +205,7 @@ const copy: Record<Locale, Copy> = {
     systemSettings: "System settings",
     social: "Social media",
     footerSettings: "Footer settings",
+    logout: "Sign out",
     help: "Help center",
     store: "Milano Store",
     online: "Online now",
@@ -392,6 +395,7 @@ function Sidebar({ locale, view, setView, open, onClose, onHelp }: { locale: Loc
             <div className="store-info"><strong>{t("store")}</strong><span>{t("online")}</span></div>
             <ChevronDown size={15} color="var(--muted)" />
           </div>
+          <button className="logout-bar" onClick={() => toast.info(locale === "ar" ? "سيتم تفعيل تسجيل الخروج عند ربط الحساب" : "Sign out will be enabled when the account is connected")}><LogOut size={16} />{t("logout")}</button>
         </div>
       </aside>
     </>
