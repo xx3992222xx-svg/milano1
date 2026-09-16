@@ -15,6 +15,7 @@ import {
   ChevronLeft,
   CircleDollarSign,
   Clock3,
+  CalendarDays,
   Facebook,
   FileText,
   Filter,
@@ -33,6 +34,7 @@ import {
   MoreVertical,
   Package,
   Paperclip,
+  Pencil,
   Plus,
   RefreshCw,
   Search,
@@ -41,6 +43,7 @@ import {
   Settings,
   ShoppingBag,
   ShoppingCart,
+  Printer,
   Smile,
   Sparkles,
   Store,
@@ -51,6 +54,7 @@ import {
   UserRound,
   Users,
   WalletCards,
+  Trash2,
   X,
   Zap,
 } from "lucide-react";
@@ -284,6 +288,15 @@ const conversations = [
   { id: 5, name: "ريم الشمري", initials: "رش", color: "linear-gradient(135deg,#d0b4fb,#906bd0)", message: "هل يمكن تغيير العنوان؟", time: "أمس", channel: "whatsapp", unread: 0, tag: "important" },
 ];
 
+const purchaseRows = [
+  { invoice: "PUR-550493", supplier: "تاجر بوني", product: "بوني حبوب البن الخضراء", date: "2026-09-15", qty: "2", total: "28,000", paid: "28,000", remaining: "0", status: "paid", ref: "554465" },
+  { invoice: "PUR-2026-573", supplier: "تاجر بوني", product: "بوني حبوب إدرياس بنغالي", date: "2026-09-13", qty: "3", total: "17,300", paid: "1,000", remaining: "16,300", status: "paid", ref: "798464" },
+  { invoice: "PUR-2026-001", supplier: "مصنع الأبطال للملابس الرياضية", product: "أطقم كورة قدم ميلانو الرياضية 2025", date: "2026-09-11", qty: "101", total: "350,500", paid: "350,000", remaining: "500", status: "late", ref: "771234567" },
+  { invoice: "PUR-2026-002", supplier: "مؤسسة النجم الراقي للأحذية", product: "أحذية كرة قدم عشب صناعية مقاس مختلفة", date: "2026-09-08", qty: "40", total: "320,000", paid: "200,000", remaining: "120,000", status: "late", ref: "772345678" },
+  { invoice: "PUR-2026-003", supplier: "مؤسسة الهدف للكرات والمعدات", product: "كرات قدم احترافية بألوان متعددة", date: "2026-09-05", qty: "30", total: "135,000", paid: "5,000", remaining: "130,000", status: "late", ref: "773456789" },
+  { invoice: "PUR-2026-004", supplier: "مصنع القمر للملابس والمستلزمات", product: "ملابس رياضية وجاكيتات شتاء مطابقة", date: "2026-08-28", qty: "60", total: "90,000", paid: "90,000", remaining: "0", status: "paid", ref: "774567890" },
+];
+
 const channels = [
   { name: "WhatsApp", ar: "واتساب", icon: MessageCircle, color: "#1cbf73", description: "استقبل رسائل عملائك وأدر الردود من صندوق واحد.", count: "١,٢٨٤ محادثة", active: true },
   { name: "Instagram", ar: "إنستغرام", icon: Instagram, color: "#d9477b", description: "الرسائل الخاصة والتعليقات والإشارات في مكان واحد.", count: "٨٤٢ محادثة", active: true },
@@ -378,6 +391,7 @@ function Topbar({ locale, theme, setTheme, setLocale, setSidebarOpen, onNotifica
 
 function PageHeading({ locale, view, onAdd }: { locale: Locale; view: View; onAdd: () => void }) {
   const t = (key: string) => getText(locale, key);
+  if (view === "purchases") return null;
   if (view === "conversations") return <div className="page-heading"><div><div className="eyebrow"><Sparkles size={13} /> AI CUSTOMER SUPPORT</div><h1 className="page-title">{t("conversations")}</h1><p className="page-subtitle">{t("conversationsSub")}</p></div><div className="heading-actions"><button className="ghost-button" onClick={() => toast.info(locale === "ar" ? "يمكنك إدارة القنوات من تبويب القنوات المتصلة" : "Manage channels from Connected channels.")}><Link2 size={15} />{t("channels")}</button><button className="primary-button" onClick={onAdd}><Plus size={15} />{locale === "ar" ? "محادثة جديدة" : "New conversation"}</button></div></div>;
   if (view === "channels") return <div className="page-heading"><div><div className="eyebrow"><Link2 size={13} /> OMNICHANNEL</div><h1 className="page-title">{t("channels")}</h1><p className="page-subtitle">{locale === "ar" ? "اربط قنواتك الاجتماعية وأدرها من صندوق واحد." : "Connect social channels and manage them from one inbox."}</p></div><button className="primary-button" onClick={onAdd}><Plus size={15} />{t("connect")}</button></div>;
   if (view === "settings") return <div className="page-heading"><div><div className="eyebrow"><Settings size={13} /> CONTROL CENTER</div><h1 className="page-title">{t("settingsTitle")}</h1><p className="page-subtitle">{t("settingsSub")}</p></div></div>;
@@ -423,6 +437,28 @@ function Channels({ locale, onAction }: { locale: Locale; onAction: () => void }
   return <div className="channel-grid">{channels.map(channel => { const Icon = channel.icon; return <article className="channel-card" key={channel.name}><div className="channel-head"><div className="channel-brand" style={{ background: channel.color }}><Icon size={20} /></div>{channel.active ? <span className="channel-status"><CheckCircle2 size={12} />{t("connected")}</span> : <span className="status-pill" style={{ color: "var(--muted)", background: "var(--panel-soft)" }}>{locale === "ar" ? "غير متصلة" : "Not connected"}</span>}</div><h3>{locale === "ar" ? channel.ar : channel.name}</h3><p>{channel.description}</p><div className="channel-footer"><span>{channel.count}</span><button onClick={onAction}>{channel.active ? t("manage") : t("connect")}</button></div></article>; })}</div>;
 }
 
+function Purchases({ locale }: { locale: Locale }) {
+  const [filter, setFilter] = useState("all");
+  const [query, setQuery] = useState("");
+  const [showForm, setShowForm] = useState(false);
+  const [rows, setRows] = useState(purchaseRows);
+  const visibleRows = rows.filter(row => (filter === "all" || row.status === filter) && `${row.invoice} ${row.supplier} ${row.product}`.toLowerCase().includes(query.toLowerCase()));
+  const statusText = (status: string) => status === "paid" ? (locale === "ar" ? "مدفوع" : "Paid") : status === "late" ? (locale === "ar" ? "آجل" : "Due") : (locale === "ar" ? "معلق" : "Pending");
+  const money = (value: string) => `${value} ${locale === "ar" ? "ريال" : "SAR"}`;
+  const removeRow = (invoice: string) => { setRows(current => current.filter(row => row.invoice !== invoice)); toast.success(locale === "ar" ? "تم حذف الفاتورة من العرض" : "Invoice removed from view"); };
+  return <div className="purchase-page">
+    <div className="purchase-stats">
+      {[{label: locale === "ar" ? "إجمالي المشتريات" : "Total purchases", value: "940,800", color: "blue", icon: CircleDollarSign}, {label: locale === "ar" ? "إجمالي المدفوع" : "Total paid", value: "674,000", color: "green", icon: CheckCircle2}, {label: locale === "ar" ? "إجمالي المتبقي (ديون الموردين)" : "Supplier dues", value: "266,800", color: "red", icon: Clock3}, {label: locale === "ar" ? "عدد فواتير المشتريات" : "Purchase invoices", value: "6", color: "purple", icon: FileText}].map(item => { const Icon = item.icon; const isCount = item.color === "purple"; return <article className="purchase-stat" key={item.label}><span className={`purchase-stat-icon ${item.color}`}><Icon size={16} /></span><div><div className="purchase-stat-label">{item.label}</div><strong>{isCount ? item.value : money(item.value)}</strong></div></article>})}
+    </div>
+    <section className="purchase-panel panel">
+      <div className="purchase-head"><div><h2>{locale === "ar" ? "إدارة المشتريات" : "Purchase management"}</h2><p>{locale === "ar" ? "متابعة فواتير الشراء، الموردين، والمدفوعات والتكاليف." : "Track purchase invoices, suppliers, payments and costs."}</p></div><div className="purchase-actions"><button className="ghost-button" onClick={() => toast.success(locale === "ar" ? "تم تجهيز تقرير المشتريات" : "Purchase report prepared")}><FileText size={14} />{locale === "ar" ? "تقرير المشتريات" : "Purchase report"}</button><button className="primary-button" onClick={() => setShowForm(true)}><Plus size={15} />{locale === "ar" ? "إضافة فاتورة شراء" : "Add purchase invoice"}</button></div></div>
+      <div className="purchase-filters"><div className="purchase-search"><Search size={15} /><input value={query} onChange={e => setQuery(e.target.value)} placeholder={locale === "ar" ? "بحث برقم الفاتورة أو اسم المورد أو اسم المنتج..." : "Search invoice, supplier or product..."} /></div><div className="filter-tabs">{[["all", "الكل"], ["paid", "مدفوع"], ["late", "آجل"]].map(([key, label]) => <button key={key} className={filter === key ? "active" : ""} onClick={() => setFilter(key)}>{locale === "ar" ? label : key === "all" ? "All" : key === "paid" ? "Paid" : "Due"}</button>)}</div><button className="date-filter"><CalendarDays size={13} />{locale === "ar" ? "من: شوال / رمضان / ربيع" : "From: date"}</button><button className="date-filter"><CalendarDays size={13} />{locale === "ar" ? "إلى: شوال / رمضان / ربيع" : "To: date"}</button></div>
+      <div className="purchase-table-wrap"><table className="purchase-table"><thead><tr><th>#</th><th>{locale === "ar" ? "رقم الفاتورة" : "Invoice"}</th><th>{locale === "ar" ? "اسم المورد" : "Supplier"}</th><th>{locale === "ar" ? "اسم المنتج" : "Product"}</th><th>{locale === "ar" ? "التاريخ" : "Date"}</th><th>{locale === "ar" ? "الكمية" : "Qty"}</th><th>{locale === "ar" ? "إجمالي الطلب" : "Total"}</th><th>{locale === "ar" ? "المدفوع" : "Paid"}</th><th>{locale === "ar" ? "المتبقي" : "Remaining"}</th><th>{locale === "ar" ? "الحالة" : "Status"}</th><th>{locale === "ar" ? "الإجراءات" : "Actions"}</th></tr></thead><tbody>{visibleRows.map((row, index) => <tr key={row.invoice}><td>{index + 1}</td><td><b>{row.invoice}</b><small>{row.ref}</small></td><td><b>{row.supplier}</b></td><td className="purchase-product">{row.product}</td><td dir="ltr">{row.date}</td><td>{row.qty}</td><td className="money">{money(row.total)}</td><td className="money paid-money">{money(row.paid)}</td><td className={`money ${row.remaining !== "0" ? "due-money" : "paid-money"}`}>{money(row.remaining)}</td><td><span className={`purchase-status ${row.status}`}>{statusText(row.status)}</span></td><td><div className="row-actions"><button title="Print" onClick={() => toast.info(locale === "ar" ? `طباعة ${row.invoice}` : `Printing ${row.invoice}`)}><Printer size={13} /></button><button title="Edit" onClick={() => toast.info(locale === "ar" ? `تعديل ${row.invoice}` : `Editing ${row.invoice}`)}><Pencil size={13} /></button><button title="Delete" onClick={() => removeRow(row.invoice)}><Trash2 size={13} /></button></div></td></tr>)}</tbody><tfoot><tr><td colSpan={5}>{locale === "ar" ? `الإجمالي (${visibleRows.length} فواتير)` : `Total (${visibleRows.length} invoices)`}</td><td>{visibleRows.reduce((sum, row) => sum + Number(row.qty), 0)}</td><td className="money">{money("940,800")}</td><td className="money paid-money">{money("674,000")}</td><td className="money due-money">{money("266,800")}</td><td colSpan={2}></td></tr></tfoot></table></div>
+    </section>
+    {showForm && <div className="modal-backdrop" onClick={() => setShowForm(false)}><div className="purchase-modal" onClick={e => e.stopPropagation()}><div className="modal-title"><div><h3>{locale === "ar" ? "إضافة فاتورة شراء" : "Add purchase invoice"}</h3><p>{locale === "ar" ? "أدخل بيانات الفاتورة والمورد والدفعة الأولى." : "Enter invoice, supplier and first payment details."}</p></div><button className="icon-button" onClick={() => setShowForm(false)}><X size={16} /></button></div><div className="form-grid"><label>{locale === "ar" ? "رقم الفاتورة" : "Invoice number"}<input placeholder="PUR-2026-005" /></label><label>{locale === "ar" ? "اسم المورد" : "Supplier"}<input placeholder={locale === "ar" ? "اسم المورد" : "Supplier name"} /></label><label>{locale === "ar" ? "اسم المنتج" : "Product"}<input placeholder={locale === "ar" ? "اسم المنتج" : "Product name"} /></label><label>{locale === "ar" ? "التاريخ" : "Date"}<input type="date" /></label><label>{locale === "ar" ? "الإجمالي" : "Total"}<input placeholder="0" /></label><label>{locale === "ar" ? "المدفوع" : "Paid"}<input placeholder="0" /></label></div><div className="modal-footer"><button className="ghost-button" onClick={() => setShowForm(false)}>{locale === "ar" ? "إلغاء" : "Cancel"}</button><button className="primary-button" onClick={() => { setShowForm(false); toast.success(locale === "ar" ? "تم حفظ فاتورة الشراء بنجاح" : "Purchase invoice saved successfully"); }}><Check size={15} />{locale === "ar" ? "حفظ الفاتورة" : "Save invoice"}</button></div></div></div>}
+  </div>;
+}
+
 function SettingsView({ locale, setLocale, theme, setTheme }: { locale: Locale; setLocale: (l: Locale) => void; theme: Theme; setTheme: (t: Theme) => void }) {
   const t = (key: string) => getText(locale, key);
   const [autoLanguage, setAutoLanguage] = useState(true);
@@ -450,5 +486,5 @@ export default function Home() {
   const handleAdd = () => toast.success(locale === "ar" ? "تم فتح نموذج الإضافة — هذه نسخة تجريبية تفاعلية" : "Add form opened — this is an interactive preview.");
   const heading = useMemo(() => <PageHeading locale={locale} view={view} onAdd={handleAdd} />, [locale, view]);
 
-  return <div className={`app-shell ${theme}`} dir={locale === "ar" ? "rtl" : "ltr"}><div className="app-layout"><Sidebar locale={locale} view={view} setView={setView} open={sidebarOpen} onClose={() => setSidebarOpen(false)} onHelp={() => toast.info(locale === "ar" ? "مركز المساعدة قيد التجهيز" : "Help center is being prepared.")} /><main className="app-main"><div className="dashboard-content"><Topbar locale={locale} theme={theme} setTheme={setTheme} setLocale={setLocale} setSidebarOpen={setSidebarOpen} onNotifications={() => toast.info(locale === "ar" ? "لديك ٣ تنبيهات جديدة" : "You have 3 new notifications")} />{heading}{view === "dashboard" && <Dashboard locale={locale} onViewAll={() => setView("orders")} />}{view === "conversations" && <Conversations locale={locale} selected={selectedConversation} setSelected={setSelectedConversation} onProfile={() => setProfileOnMobile(!profileOnMobile)} />}{view === "channels" && <Channels locale={locale} onAction={() => toast.success(locale === "ar" ? "تم فتح إعدادات ربط القناة" : "Channel connection settings opened")} />}{view === "settings" && <SettingsView locale={locale} setLocale={setLocale} theme={theme} setTheme={setTheme} />}{!["dashboard", "conversations", "channels", "settings"].includes(view) && <Placeholder locale={locale} view={view} onBack={() => setView("dashboard")} />}</div></main></div></div>;
+  return <div className={`app-shell ${theme}`} dir={locale === "ar" ? "rtl" : "ltr"}><div className="app-layout"><Sidebar locale={locale} view={view} setView={setView} open={sidebarOpen} onClose={() => setSidebarOpen(false)} onHelp={() => toast.info(locale === "ar" ? "مركز المساعدة قيد التجهيز" : "Help center is being prepared.")} /><main className="app-main"><div className="dashboard-content"><Topbar locale={locale} theme={theme} setTheme={setTheme} setLocale={setLocale} setSidebarOpen={setSidebarOpen} onNotifications={() => toast.info(locale === "ar" ? "لديك ٣ تنبيهات جديدة" : "You have 3 new notifications")} />{heading}{view === "dashboard" && <Dashboard locale={locale} onViewAll={() => setView("orders")} />}{view === "purchases" && <Purchases locale={locale} />}{view === "conversations" && <Conversations locale={locale} selected={selectedConversation} setSelected={setSelectedConversation} onProfile={() => setProfileOnMobile(!profileOnMobile)} />}{view === "channels" && <Channels locale={locale} onAction={() => toast.success(locale === "ar" ? "تم فتح إعدادات ربط القناة" : "Channel connection settings opened")} />}{view === "settings" && <SettingsView locale={locale} setLocale={setLocale} theme={theme} setTheme={setTheme} />}{!["dashboard", "purchases", "conversations", "channels", "settings"].includes(view) && <Placeholder locale={locale} view={view} onBack={() => setView("dashboard")} />}</div></main></div></div>;
 }
