@@ -48,6 +48,7 @@ import {
   Sparkles,
   Store,
   Sun,
+  Palette,
   Tablet,
   Tag,
   TrendingUp,
@@ -84,6 +85,18 @@ const copy: Record<Locale, Copy> = {
     payments: "المدفوعات",
     reports: "التقارير المالية",
     settings: "الإعدادات",
+    addProductMenu: "إضافة منتج جديد",
+    productList: "قائمة المنتجات",
+    inventory: "إدارة المخزون",
+    orderList: "قائمة الطلبات",
+    pointOfSale: "نقطة البيع",
+    externalOrder: "إنشاء طلب خارجي",
+    design: "التصميم",
+    inboxMenu: "صندوق الوارد",
+    expensesNotes: "المصروفات والسندات",
+    systemSettings: "إعدادات النظام",
+    social: "التواصل الاجتماعي",
+    footerSettings: "إعدادات التذييل",
     help: "مركز المساعدة",
     store: "متجر ميلانو",
     online: "متصل الآن",
@@ -178,6 +191,18 @@ const copy: Record<Locale, Copy> = {
     payments: "Payments",
     reports: "Financial reports",
     settings: "Settings",
+    addProductMenu: "Add new product",
+    productList: "Product list",
+    inventory: "Inventory management",
+    orderList: "Order list",
+    pointOfSale: "Point of sale",
+    externalOrder: "Create external order",
+    design: "Design",
+    inboxMenu: "Inbox",
+    expensesNotes: "Expenses and vouchers",
+    systemSettings: "System settings",
+    social: "Social media",
+    footerSettings: "Footer settings",
     help: "Help center",
     store: "Milano Store",
     online: "Online now",
@@ -306,23 +331,22 @@ const channels = [
   { name: "Live chat", ar: "الموقع الإلكتروني", icon: Globe2, color: "#7759e7", description: "أضف محادثة مباشرة إلى متجرك وابدأ بالرد فوراً.", count: "قريباً", active: false },
 ];
 
-const navGroups: { title: string; items: { key: View | "customers" | "help"; label: string; icon: LucideIcon; badge?: string }[] }[] = [
+const navGroups: { title: string; items: { key: View | "help"; label: string; icon: LucideIcon; badge?: string; children?: { label: string; icon?: LucideIcon }[] }[] }[] = [
   { title: "workspace", items: [
     { key: "dashboard", label: "dashboard", icon: LayoutDashboard },
     { key: "purchases", label: "purchases", icon: ShoppingBag },
-    { key: "products", label: "products", icon: Package },
-    { key: "orders", label: "orders", icon: ShoppingCart },
+    { key: "products", label: "products", icon: Package, children: [{ label: "addProductMenu", icon: Plus }, { label: "productList", icon: MoreHorizontal }, { label: "inventory", icon: Boxes }] },
+    { key: "orders", label: "orders", icon: ShoppingCart, children: [{ label: "orderList", icon: MoreHorizontal }, { label: "pointOfSale", icon: Store }, { label: "externalOrder", icon: SendHorizontal }] },
     { key: "conversations", label: "conversations", icon: MessageSquareText, badge: "12" },
-  ] },
-  { title: "manage", items: [
-    { key: "customers", label: "customers", icon: Users },
-    { key: "analytics", label: "analytics", icon: BarChart3 },
   ] },
   { title: "commerce", items: [
     { key: "discounts", label: "discounts", icon: Tag },
     { key: "reviews", label: "reviews", icon: MessageCircle },
+    { key: "channels", label: "design", icon: Palette },
+    { key: "conversations", label: "inboxMenu", icon: MessageSquareText },
     { key: "shipping", label: "shipping", icon: ShoppingBag },
     { key: "payments", label: "payments", icon: WalletCards },
+    { key: "expenses", label: "expensesNotes", icon: WalletCards },
     { key: "reports", label: "reports", icon: FileText },
   ] },
 ];
@@ -334,6 +358,8 @@ function ChannelMini({ channel }: { channel: string }) {
 
 function Sidebar({ locale, view, setView, open, onClose, onHelp }: { locale: Locale; view: View; setView: (v: View) => void; open: boolean; onClose: () => void; onHelp: () => void }) {
   const t = (key: string) => getText(locale, key);
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({ products: true, orders: true, settings: true });
+  const selectSubmenu = (label: string) => { toast.info(locale === "ar" ? `تم اختيار ${t(label)}` : `${t(label)} selected`); onClose(); };
   return (
     <>
       <div className={`sidebar-backdrop ${open ? "visible" : ""}`} onClick={onClose} />
@@ -346,16 +372,17 @@ function Sidebar({ locale, view, setView, open, onClose, onHelp }: { locale: Loc
         <div className="sidebar-scroll">
           {navGroups.map((group) => (
             <div className="nav-group" key={group.title}>
-              <div className="nav-heading">{group.title === "workspace" ? (locale === "ar" ? "مساحة العمل" : "WORKSPACE") : (locale === "ar" ? "الإدارة" : "MANAGE")}</div>
+              <div className="nav-heading">{group.title === "workspace" ? (locale === "ar" ? "مساحة العمل" : "WORKSPACE") : (locale === "ar" ? "التجارة" : "COMMERCE")}</div>
               {group.items.map((item) => {
                 const Icon = item.icon;
-                return <button key={item.key} className={`nav-item ${view === item.key ? "active" : ""}`} onClick={() => { setView(item.key as View); onClose(); }}><Icon className="nav-icon" size={17} /><span>{t(item.label)}</span>{item.badge && <span className="nav-badge">{item.badge}</span>}</button>;
+                const hasChildren = Boolean(item.children?.length);
+                return <div key={`${group.title}-${item.label}`} className="nav-tree"><button className={`nav-item ${view === item.key ? "active" : ""}`} onClick={() => { setView(item.key as View); if (hasChildren) setExpanded((current) => ({ ...current, [item.key]: !current[item.key] })); else onClose(); }}><Icon className="nav-icon" size={17} /><span>{t(item.label)}</span>{item.badge && <span className="nav-badge">{item.badge}</span>}{hasChildren && <ChevronDown className={`nav-chevron ${expanded[item.key] ? "open" : ""}`} size={13} />}</button>{hasChildren && expanded[item.key] && <div className="nav-children">{item.children?.map((child) => { const ChildIcon = child.icon ?? MoreHorizontal; return <button className="nav-child" key={child.label} onClick={() => selectSubmenu(child.label)}><ChildIcon size={13} /><span>{t(child.label)}</span></button>; })}</div>}</div>;
               })}
             </div>
           ))}
           <div className="nav-group">
             <div className="nav-heading">{locale === "ar" ? "النظام" : "SYSTEM"}</div>
-            <button className={`nav-item ${view === "settings" ? "active" : ""}`} onClick={() => { setView("settings"); onClose(); }}><Settings className="nav-icon" size={17} /><span>{t("settings")}</span></button>
+            <div className="nav-tree"><button className={`nav-item ${view === "settings" ? "active" : ""}`} onClick={() => { setView("settings"); setExpanded((current) => ({ ...current, settings: !current.settings })); }}><Settings className="nav-icon" size={17} /><span>{t("systemSettings")}</span><ChevronDown className={`nav-chevron ${expanded.settings ? "open" : ""}`} size={13} /></button>{expanded.settings && <div className="nav-children"><button className="nav-child" onClick={() => { setView("settings"); onClose(); }}><Settings size={13} /><span>{t("settings")}</span></button><button className="nav-child" onClick={() => selectSubmenu("social")}><Globe2 size={13} /><span>{t("social")}</span></button><button className="nav-child" onClick={() => selectSubmenu("footerSettings")}><MoreHorizontal size={13} /><span>{t("footerSettings")}</span></button></div>}</div>
             <button className="nav-item" onClick={onHelp}><HelpCircle className="nav-icon" size={17} /><span>{t("help")}</span></button>
           </div>
         </div>
