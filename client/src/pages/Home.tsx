@@ -58,7 +58,7 @@ import type { LucideIcon } from "lucide-react";
 
 type Locale = "ar" | "en";
 type Theme = "light" | "dark";
-type View = "dashboard" | "conversations" | "channels" | "settings" | "products" | "orders" | "purchases" | "analytics";
+type View = "dashboard" | "conversations" | "channels" | "settings" | "products" | "orders" | "purchases" | "analytics" | "discounts" | "reviews" | "shipping" | "payments" | "expenses" | "reports";
 
 type Copy = {
   [key: string]: string | Copy;
@@ -74,6 +74,11 @@ const copy: Record<Locale, Copy> = {
     conversations: "المحادثات",
     customers: "العملاء",
     analytics: "التحليلات",
+    discounts: "الخصومات",
+    reviews: "آراء العملاء",
+    shipping: "إعدادات التوصيل",
+    payments: "المدفوعات",
+    reports: "التقارير المالية",
     settings: "الإعدادات",
     help: "مركز المساعدة",
     store: "متجر ميلانو",
@@ -163,6 +168,11 @@ const copy: Record<Locale, Copy> = {
     conversations: "Conversations",
     customers: "Customers",
     analytics: "Analytics",
+    discounts: "Discounts",
+    reviews: "Customer reviews",
+    shipping: "Shipping settings",
+    payments: "Payments",
+    reports: "Financial reports",
     settings: "Settings",
     help: "Help center",
     store: "Milano Store",
@@ -295,6 +305,13 @@ const navGroups: { title: string; items: { key: View | "customers" | "help"; lab
     { key: "customers", label: "customers", icon: Users },
     { key: "analytics", label: "analytics", icon: BarChart3 },
   ] },
+  { title: "commerce", items: [
+    { key: "discounts", label: "discounts", icon: Tag },
+    { key: "reviews", label: "reviews", icon: MessageCircle },
+    { key: "shipping", label: "shipping", icon: ShoppingBag },
+    { key: "payments", label: "payments", icon: WalletCards },
+    { key: "reports", label: "reports", icon: FileText },
+  ] },
 ];
 
 function ChannelMini({ channel }: { channel: string }) {
@@ -377,9 +394,12 @@ function Dashboard({ locale, onViewAll }: { locale: Locale; onViewAll: () => voi
   const t = (key: string) => getText(locale, key);
   return <>
     <StatCards locale={locale} />
+    <div className="stats-grid secondary-stats">
+      {[{label: locale === "ar" ? "إجمالي المشتريات" : "Purchases", value: locale === "ar" ? "٩٤٠,٨٠٠" : "940,800", suffix: "ر.س", icon: ShoppingBag, color: "green"}, {label: locale === "ar" ? "إجمالي المبيعات" : "Sales", value: locale === "ar" ? "١٠٢,٠٠٠" : "102,000", suffix: "ر.س", icon: BarChart3, color: "blue"}, {label: locale === "ar" ? "قيمة المخزون" : "Inventory value", value: locale === "ar" ? "٤,٠٩٠,٢٠٠" : "4,090,200", suffix: "ر.س", icon: Boxes, color: "orange"}, {label: locale === "ar" ? "المخزون المنخفض" : "Low stock", value: locale === "ar" ? "١٨" : "18", suffix: locale === "ar" ? "منتج" : "items", icon: AlertTriangle, color: "red"}].map(item => { const Icon = item.icon; return <article className="stat-card" key={item.label}><div className="stat-top"><span className="stat-label">{item.label}</span><span className={`stat-icon ${item.color}`}><Icon size={17} /></span></div><div className="stat-value">{item.value}<small>{item.suffix}</small></div><div className="stat-foot"><span>{locale === "ar" ? "مقارنة بالشهر الماضي" : "Compared to last month"}</span></div></article>})}
+    </div>
     <div className="main-grid">
       <section className="panel"><div className="panel-header"><div><h2 className="panel-title">{t("revenue")}</h2><span className="panel-note">{t("thisMonth")}</span></div><div className="chart-legend"><span className="legend-item"><i className="legend-dot blue" />{t("revenue")}</span><span className="legend-item"><i className="legend-dot soft" />{t("expenses")}</span><button className="ghost-button" style={{ height: 29, padding: "0 8px", fontSize: 10 }}>{t("monthly")} <ChevronDown size={12} /></button></div></div><div className="chart-wrap"><div className="chart-total">{locale === "ar" ? "إجمالي" : "Total"}<strong>{locale === "ar" ? "١٢٤,٥٨٠ ر.س" : "124,580 SAR"}</strong></div><div className="chart">{chartBars.map((height, index) => <div className="chart-bar-group" key={index}><span className="chart-bar" style={{ height: `${Math.max(25, height - 15)}%` }} /><span className="chart-bar primary" style={{ height: `${height}%` }} /><span className="chart-label">{locale === "ar" ? months[index] : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][index]}</span></div>)}</div></div></section>
-      <section className="panel"><div className="panel-header"><div><h2 className="panel-title">{t("activity")}</h2><span className="panel-note">{t("today")}</span></div><button className="panel-action" onClick={onViewAll}>{t("viewAll")}</button></div><div className="activity-list"><div className="activity-item"><div className="activity-avatar" style={{ color: "var(--green)", background: "var(--green-soft)" }}><CheckCircle2 size={15} /></div><div className="activity-copy"><strong>{locale === "ar" ? "تم إكمال الطلب #ML-4832" : "Order #ML-4832 completed"}</strong><span>{locale === "ar" ? "سارة العتيبي · ٣٤٩ ر.س" : "Sara Alotaibi · 349 SAR"}</span></div><span className="activity-time">09:42</span></div><div className="activity-item"><div className="activity-avatar" style={{ color: "var(--blue)", background: "var(--blue-soft)" }}><MessageCircle size={15} /></div><div className="activity-copy"><strong>{locale === "ar" ? "رد آلي على محادثة جديدة" : "AI replied to new conversation"}</strong><span>{locale === "ar" ? "محمد القحطاني · واتساب" : "Mohammed Alqahtani · WhatsApp"}</span></div><span className="activity-time">09:18</span></div><div className="activity-item"><div className="activity-avatar" style={{ color: "var(--orange)", background: "var(--orange-soft)" }}><Package size={15} /></div><div className="activity-copy"><strong>{locale === "ar" ? "تم تحديث المخزون" : "Inventory was updated"}</strong><span>{locale === "ar" ? "تمت إضافة ٥٠ قطعة إلى المخزون" : "50 units added to inventory"}</span></div><span className="activity-time">08:56</span></div></div></section>
+      <section className="panel donut-panel"><div className="panel-header"><div><h2 className="panel-title">{locale === "ar" ? "الأكثر مبيعاً" : "Best sellers"}</h2><span className="panel-note">{locale === "ar" ? "هذا الشهر" : "This month"}</span></div><button className="panel-action" onClick={onViewAll}>{t("viewAll")}</button></div><div className="donut-wrap"><div className="donut" /><div className="donut-legend"><span><i style={{background:"#32b7df"}} />{locale === "ar" ? "سماعات" : "Headphones"}</span><span><i style={{background:"#d93c96"}} />{locale === "ar" ? "حقائب" : "Bags"}</span><span><i style={{background:"#984fe4"}} />{locale === "ar" ? "ساعات" : "Watches"}</span><span><i style={{background:"#ffad16"}} />{locale === "ar" ? "إكسسوارات" : "Accessories"}</span></div></div></section>
     </div>
     <div className="bottom-grid"><section className="panel"><div className="panel-header"><div><h2 className="panel-title">{t("recentOrders")}</h2><span className="panel-note">{locale === "ar" ? "آخر ٧ أيام" : "Last 7 days"}</span></div><button className="panel-action" onClick={onViewAll}>{t("viewAll")}</button></div><div className="table-wrap"><table className="data-table"><thead><tr><th>{t("product")}</th><th>{t("customer")}</th><th>{t("amount")}</th><th>{t("status")}</th></tr></thead><tbody>{orders.map((order) => <tr key={order.id}><td><div className="product-cell"><div className="product-thumb"><ShoppingBag size={14} /></div><div><span className="product-name">{order.name}</span><span className="product-sku">{order.id} · {order.sku}</span></div></div></td><td>{locale === "ar" ? order.customer : ["Sara Alotaibi", "Mohammed Alqahtani", "Noura Alharbi"][orders.indexOf(order)]}</td><td style={{ fontFamily: "Inter", fontWeight: 700 }}>{locale === "ar" ? order.amount : ["349 SAR", "580 SAR", "799 SAR"][orders.indexOf(order)]}</td><td><span className={`status-pill ${order.status === "completed" ? "success" : order.status === "processing" ? "warning" : "danger"}`}>{order.status === "completed" ? <CheckCircle2 size={11} /> : order.status === "processing" ? <Clock3 size={11} /> : <AlertTriangle size={11} />}{t(order.status)}</span></td></tr>)}</tbody></table></div></section><section className="panel"><div className="panel-header"><div><h2 className="panel-title">{t("lowStock")}</h2><span className="panel-note">{t("needAttention")}</span></div><button className="panel-action" onClick={onViewAll}>{t("viewAll")}</button></div><div className="alert-list"><div className="alert-card"><div className="alert-symbol orange"><AlertTriangle size={15} /></div><div><strong>{locale === "ar" ? "حقيبة جلدية كلاسيك" : "Classic leather bag"}</strong><span>{locale === "ar" ? "متبقي ٤ قطع فقط · حد التنبيه ١٠" : "Only 4 units left · Alert limit 10"}</span></div></div><div className="alert-card"><div className="alert-symbol red"><AlertTriangle size={15} /></div><div><strong>{locale === "ar" ? "ساعة Milano One" : "Milano One watch"}</strong><span>{locale === "ar" ? "متبقي ٢ قطعة فقط · حد التنبيه ٥" : "Only 2 units left · Alert limit 5"}</span></div></div></div></section></div>
   </>;
