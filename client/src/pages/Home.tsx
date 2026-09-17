@@ -96,6 +96,7 @@ const copy: Record<Locale, Copy> = {
     settings: "الإعدادات",
     addProductMenu: "إضافة منتج جديد",
     productList: "قائمة المنتجات",
+    categoryManagement: "إدارة الأقسام",
     inventory: "إدارة المخزون",
     orderList: "قائمة الطلبات",
     pointOfSale: "نقطة البيع",
@@ -203,6 +204,7 @@ const copy: Record<Locale, Copy> = {
     settings: "Settings",
     addProductMenu: "Add new product",
     productList: "Product list",
+    categoryManagement: "Category management",
     inventory: "Inventory management",
     orderList: "Order list",
     pointOfSale: "Point of sale",
@@ -346,7 +348,7 @@ const navGroups: { title: string; items: { key: View | "help"; label: string; ic
   { title: "workspace", items: [
     { key: "dashboard", label: "dashboard", icon: LayoutDashboard },
     { key: "purchases", label: "purchases", icon: ShoppingBag },
-    { key: "products", label: "products", icon: Package, children: [{ label: "addProductMenu", icon: Plus }, { label: "productList", icon: MoreHorizontal }, { label: "inventory", icon: Boxes }] },
+    { key: "products", label: "products", icon: Package, children: [{ label: "addProductMenu", icon: Plus }, { label: "productList", icon: MoreHorizontal }, { label: "categoryManagement", icon: LayoutDashboard }, { label: "inventory", icon: Boxes }] },
     { key: "orders", label: "orders", icon: ShoppingCart, children: [{ label: "orderList", icon: MoreHorizontal }, { label: "pointOfSale", icon: Store }, { label: "externalOrder", icon: SendHorizontal }] },
     { key: "conversations", label: "conversations", icon: MessageSquareText, badge: "12" },
   ] },
@@ -370,7 +372,7 @@ function ChannelMini({ channel }: { channel: string }) {
 function Sidebar({ locale, view, setView, open, onClose, onHelp }: { locale: Locale; view: View; setView: (v: View) => void; open: boolean; onClose: () => void; onHelp: () => void }) {
   const t = (key: string) => getText(locale, key);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({ products: true, orders: true, settings: true });
-  const selectSubmenu = (label: string) => { setView(label as View); onClose(); };
+  const selectSubmenu = (label: string) => { setView(label === "productList" || label === "categoryManagement" ? "products" : label as View); onClose(); };
   return (
     <>
       <div className={`sidebar-backdrop ${open ? "visible" : ""}`} onClick={onClose} />
