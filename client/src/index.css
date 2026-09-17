@@ -4,10 +4,10 @@
 :root {
   font-family: "Cairo", "Inter", system-ui, sans-serif;
   color: #111827;
-  background: #f7f8fc;
+  background: #f5f7f9;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  --bg: #f7f8fc;
+  --bg: #f5f7f9;
   --panel: #ffffff;
   --panel-soft: #fbfcff;
   --ink: #121a2a;
@@ -282,3 +282,13 @@ button { cursor: pointer; }
 .small-action { width: 28px; height: 28px; display: inline-grid; place-items: center; border: 1px solid var(--line); border-radius: 7px; background: var(--panel-soft); color: var(--muted); } .small-action:hover { color: var(--blue); border-color: var(--blue); }
 .nav-child.active { color: var(--blue); background: var(--blue-soft); }
 @media (max-width: 700px) { .operational-summary { align-items: flex-start; flex-wrap: wrap; } .operational-summary .primary-button { width: 100%; } .mini-stats { grid-template-columns: 1fr; } }
+
+/* Reference dashboard statistics */
+.reference-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 18px; }
+.reference-stat { min-height: 126px; padding: 15px 16px; border-radius: 16px; display: flex; flex-direction: column; justify-content: space-between; text-align: center; background: var(--panel); border-color: #e6eaf0; box-shadow: 0 5px 18px rgba(40, 55, 80, .055); }
+.reference-icon-row { display: flex; justify-content: center; } .reference-icon-row .stat-icon { width: 30px; height: 30px; border-radius: 50%; }
+.reference-card-copy { display: flex; flex-direction: column; align-items: center; gap: 3px; } .reference-card-copy strong { color: var(--ink); font-size: 20px; line-height: 1.15; font-weight: 800; letter-spacing: -.2px; } .reference-card-copy strong small { font-size: 10px; font-weight: 700; margin-inline-start: 3px; } .reference-card-copy span { color: var(--muted); font-size: 11px; font-weight: 600; } .reference-card-copy em { color: var(--muted); font-size: 9px; font-style: normal; margin-top: 2px; }
+.reference-stat .stat-icon.green { color: #10b981; background: rgba(16,185,129,.12); } .reference-stat .stat-icon.blue { color: #2563eb; background: rgba(37,99,235,.11); } .reference-stat .stat-icon.teal { color: #14b8a6; background: rgba(20,184,166,.12); } .reference-stat .stat-icon.pink { color: #ef476f; background: rgba(239,71,111,.12); } .reference-stat .stat-icon.orange { color: #f59e0b; background: rgba(245,158,11,.13); } .reference-stat .stat-icon.purple { color: #8b5cf6; background: rgba(139,92,246,.12); }
+.stock-stat { justify-content: flex-start; gap: 9px; } .stock-values { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; flex: 1; width: 100%; } .stock-values > div:not(.stock-divider) { display: flex; flex-direction: column; gap: 4px; align-items: center; } .stock-values span { color: var(--muted); font-size: 10px; font-weight: 600; } .stock-values strong { font-size: 23px; font-weight: 800; line-height: 1; } .stock-low { color: #f59e0b; } .stock-out { color: #ef4444; } .stock-divider { width: 1px; height: 42px; background: var(--line); }
+@media (max-width: 820px) { .reference-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .reference-stats { gap: 9px; } .reference-stat { min-height: 118px; padding: 13px 10px; } .reference-card-copy strong { font-size: 17px; } .stock-values strong { font-size: 20px; } }
