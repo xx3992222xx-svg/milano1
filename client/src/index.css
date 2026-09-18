@@ -480,3 +480,34 @@ button { cursor: pointer; }
 .receipt-refund { color:#f59e0b; border-color:rgba(245,158,11,.35); background:rgba(245,158,11,.10); }
 .receipt-delete { color:#fb7185; border-color:rgba(244,63,94,.35); background:rgba(244,63,94,.10); }
 @media (max-width:800px) { .receipt-toolbar { grid-template-columns:1fr; } .receipt-filters { align-items:stretch; } .receipt-search { width:190px; } }
+
+/* Receipt history theme integration: light default, dark when system theme is dark */
+.receipt-page { color:var(--ink); background:var(--bg); }
+.receipt-head,.receipt-stat,.receipt-filters { border-color:var(--line); background:var(--panel); }
+.receipt-head h1 { color:var(--ink); }
+.receipt-head p,.receipt-stat small { color:var(--muted); }
+.receipt-dates button,.receipt-filter-tabs button { color:var(--muted); border-color:var(--line); background:var(--panel-soft); }
+.receipt-table-card { border-color:var(--line); background:var(--panel); }
+.receipt-table-top { color:var(--muted); }
+.receipt-search { border-color:var(--line); color:var(--muted); background:var(--panel-soft); }
+.receipt-search input { color:var(--ink); }
+.receipt-table th { color:var(--muted); background:var(--panel-soft); border-color:var(--line); }
+.receipt-table td { color:var(--muted); border-color:var(--line); }
+.receipt-table tr:hover td { background:var(--panel-soft); }
+.receipt-table td b,.receipt-table td strong { color:var(--ink); }
+.receipt-table td small { color:var(--muted); }
+.receipt-method { color:#047857; background:rgba(16,185,129,.10); }
+.dark .receipt-page { color:#e7edf8; background:#090e18; }
+.dark .receipt-head,.dark .receipt-stat,.dark .receipt-filters { border-color:#253148; background:#101827; }
+.dark .receipt-head h1 { color:#f1f5fb; }
+.dark .receipt-head p,.dark .receipt-stat small { color:#8290a7; }
+.dark .receipt-dates button,.dark .receipt-filter-tabs button { color:#a6b2c5; border-color:#2a3850; background:#151f30; }
+.dark .receipt-table-card { border-color:#253148; background:#0e1623; }
+.dark .receipt-table-top { color:#aebbd0; }
+.dark .receipt-search { border-color:#293750; color:#8190a8; background:#121d2d; }
+.dark .receipt-search input { color:#d8e2f0; }
+.dark .receipt-table th { color:#9ba8bc; background:#151e2d; border-color:#253148; }
+.dark .receipt-table td { color:#b7c3d4; border-color:#202c40; }
+.dark .receipt-table tr:hover td { background:#121d2d; }
+.dark .receipt-table td b,.dark .receipt-table td strong { color:#e5ecf7; }
+.dark .receipt-table td small { color:#93a1b5; }
