@@ -441,3 +441,42 @@ button { cursor: pointer; }
 .dark .pos-exit { color:#aab6c9; border-color:#2b3850; background:rgba(21,31,48,.65); }
 .dark .pos-table th { color:#a0aec0; background:#172133; border-color:#2a364b; }
 .dark .pos-table td { border-color:#263147; }
+
+/* Receipt history report */
+.receipt-page { display:flex; flex-direction:column; gap:13px; margin:-8px -8px -20px; padding:8px; color:#e7edf8; background:#090e18; border-radius:10px; }
+.receipt-head { display:flex; align-items:center; justify-content:space-between; padding:11px 14px; border:1px solid #253148; border-radius:10px; background:#101827; }
+.receipt-head h1 { margin:0; color:#f1f5fb; font-size:15px; }
+.receipt-head p { margin:3px 0 0; color:#8290a7; font-size:8px; }
+.receipt-toolbar { display:grid; grid-template-columns:1.1fr .8fr 2fr; gap:10px; }
+.receipt-stat,.receipt-filters { min-height:74px; display:flex; align-items:center; gap:11px; padding:11px 13px; border:1px solid #253148; border-radius:10px; background:#101827; }
+.receipt-stat-icon { width:34px; height:34px; display:grid; place-items:center; border-radius:10px; }
+.receipt-stat-icon.green { color:#10b981; background:rgba(16,185,129,.11); }
+.receipt-stat-icon.blue { color:#60a5fa; background:rgba(59,130,246,.12); }
+.receipt-stat small,.receipt-stat strong { display:block; }
+.receipt-stat small { color:#9aa8bd; font-size:8px; }
+.receipt-stat strong { margin-top:5px; color:#10d7a0; font-size:15px; }
+.receipt-stat:nth-child(2) strong { color:#f4f7fb; }
+.receipt-filters { justify-content:space-between; flex-wrap:wrap; gap:7px; }
+.receipt-dates,.receipt-filter-tabs { display:flex; align-items:center; gap:5px; }
+.receipt-dates button,.receipt-filter-tabs button { height:25px; padding:0 8px; border:1px solid #2a3850; border-radius:6px; color:#a6b2c5; background:#151f30; font:700 8px inherit; }
+.receipt-filter-tabs button.active { color:#fff; border-color:#2563eb; background:#2563eb; }
+.receipt-report { height:27px; display:inline-flex; align-items:center; gap:5px; padding:0 9px; border:0; border-radius:6px; color:#fff; background:#2563eb; font:800 8px inherit; }
+.receipt-table-card { padding:0; overflow:hidden; border:1px solid #253148; background:#0e1623; }
+.receipt-table-top { display:flex; align-items:center; justify-content:space-between; padding:10px 12px; color:#aebbd0; font-size:9px; }
+.receipt-search { width:280px; height:27px; display:flex; align-items:center; gap:6px; padding:0 8px; border:1px solid #293750; border-radius:6px; color:#8190a8; background:#121d2d; }
+.receipt-search input { width:100%; border:0; outline:0; color:#d8e2f0; background:transparent; font:8px inherit; }
+.receipt-table-wrap { overflow-x:auto; }
+.receipt-table { width:100%; min-width:960px; border-collapse:collapse; direction:rtl; }
+.receipt-table th { padding:9px 8px; color:#9ba8bc; background:#151e2d; border-top:1px solid #253148; border-bottom:1px solid #253148; font-size:8px; text-align:right; white-space:nowrap; }
+.receipt-table td { padding:9px 8px; color:#b7c3d4; border-bottom:1px solid #202c40; font-size:8px; text-align:right; white-space:nowrap; }
+.receipt-table tr:hover td { background:#121d2d; }
+.receipt-table td b,.receipt-table td strong { color:#e5ecf7; }
+.receipt-table td small { color:#93a1b5; font-size:7px; }
+.receipt-method { padding:4px 7px; border-radius:5px; color:#21d7a0; background:rgba(16,185,129,.10); }
+.receipt-actions { display:flex; gap:4px; }
+.receipt-actions button { width:22px; height:22px; display:grid; place-items:center; border:1px solid; border-radius:5px; }
+.receipt-edit { color:#a78bfa; border-color:rgba(139,92,246,.35); background:rgba(139,92,246,.10); }
+.receipt-print { color:#60a5fa; border-color:rgba(59,130,246,.35); background:rgba(59,130,246,.10); }
+.receipt-refund { color:#f59e0b; border-color:rgba(245,158,11,.35); background:rgba(245,158,11,.10); }
+.receipt-delete { color:#fb7185; border-color:rgba(244,63,94,.35); background:rgba(244,63,94,.10); }
+@media (max-width:800px) { .receipt-toolbar { grid-template-columns:1fr; } .receipt-filters { align-items:stretch; } .receipt-search { width:190px; } }
