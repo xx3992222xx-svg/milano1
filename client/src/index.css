@@ -511,3 +511,19 @@ button { cursor: pointer; }
 .dark .receipt-table tr:hover td { background:#121d2d; }
 .dark .receipt-table td b,.dark .receipt-table td strong { color:#e5ecf7; }
 .dark .receipt-table td small { color:#93a1b5; }
+
+/* Refined POS navigation and theme-aware dashboard heading */
+.pos-nav-child { position:relative; overflow:hidden; color:#2563eb; background:rgba(59,130,246,.10); border:1px solid rgba(59,130,246,.14); }
+.pos-nav-child::after { content:""; position:absolute; inset-block:-40%; inset-inline-start:-55%; width:35%; transform:skewX(-22deg); background:linear-gradient(90deg,transparent,rgba(255,255,255,.78),transparent); animation:pos-nav-shine 2.8s ease-in-out infinite; pointer-events:none; }
+.pos-nav-child:hover,.pos-nav-child.active { color:#1d4ed8; background:rgba(59,130,246,.16); }
+@keyframes pos-nav-shine { 0%,35% { inset-inline-start:-55%; opacity:0; } 48% { opacity:1; } 72%,100% { inset-inline-start:125%; opacity:0; } }
+.page-heading .page-title { color:var(--ink); }
+.app-shell:not(.dark) .page-heading .page-title,
+.app-shell:not(.dark) .page-heading .page-subtitle,
+.app-shell:not(.dark) .nav-item,
+.app-shell:not(.dark) .nav-child { color:var(--ink); }
+.dark .pos-nav-child { color:#93c5fd; border-color:rgba(96,165,250,.23); background:rgba(59,130,246,.16); }
+.dark .pos-nav-child:hover,.dark .pos-nav-child.active { color:#bfdbfe; background:rgba(59,130,246,.24); }
+@media (prefers-reduced-motion: reduce) { .pos-nav-child::after { animation:none; } }
+.app-shell:not(.dark) .nav-item.active { color:var(--blue); }
+.app-shell:not(.dark) .pos-nav-child,.app-shell:not(.dark) .pos-nav-child.active { color:#2563eb; }
