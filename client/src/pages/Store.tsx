@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { ArrowLeft, ArrowRight, CheckCircle2, ChevronLeft, Minus, Package, Plus, Search, ShoppingBag, Trash2, Truck, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, ChevronLeft, LayoutDashboard, Minus, Package, Plus, Search, ShoppingBag, Trash2, Truck, X } from "lucide-react";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
@@ -14,7 +14,7 @@ function ProductVisual({ product }: { product: StoreProduct }) {
 }
 
 function StoreHeader({ cartCount, onCart, onHome, search, setSearch }: { cartCount: number; onCart: () => void; onHome: () => void; search: string; setSearch: (value: string) => void }) {
-  return <header className="store-header"><button className="store-brand" onClick={onHome} aria-label="العودة إلى المتجر"><span className="store-brand-mark">م</span><span><strong>ميلانو</strong><small>متجر ميلانو</small></span></button><div className="store-search"><Search size={17} /><input value={search} onChange={e => setSearch(e.target.value)} placeholder="ابحث عن منتج أو رمز المنتج..." /></div><button className="store-cart-button" onClick={onCart}><ShoppingBag size={19} /><span>السلة</span>{cartCount > 0 && <b>{cartCount}</b>}</button></header>;
+  return <header className="store-header"><button className="store-brand" onClick={onHome} aria-label="العودة إلى المتجر"><span className="store-brand-mark">م</span><span><strong>ميلانو</strong><small>متجر ميلانو</small></span></button><div className="store-search"><Search size={17} /><input value={search} onChange={e => setSearch(e.target.value)} placeholder="ابحث عن منتج أو رمز المنتج..." /></div><div className="store-header-actions"><button className="store-admin-link" onClick={() => { window.location.href = "/admin"; }}><LayoutDashboard size={16} /><span>لوحة التحكم</span></button><button className="store-cart-button" onClick={onCart}><ShoppingBag size={19} /><span>السلة</span>{cartCount > 0 && <b>{cartCount}</b>}</button></div></header>;
 }
 
 export default function Storefront() {
