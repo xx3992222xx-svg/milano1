@@ -35,6 +35,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Storefront} />
       <Route path="/checkout" component={Storefront} />
+      <Route path="/product/:id" component={Storefront} />
       <Route path="/admin" component={AdminGuard} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
