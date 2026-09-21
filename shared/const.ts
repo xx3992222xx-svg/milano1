@@ -1,4 +1,6 @@
-export const COOKIE_NAME = "app_session_id";
+// Admin/vendor session. Customer sessions, when enabled, must use a separate cookie.
+export const COOKIE_NAME = "milano_admin_session";
+export const CUSTOMER_COOKIE_NAME = "milano_customer_session";
 export const ONE_YEAR_MS = 1000 * 60 * 60 * 24 * 365;
 export const AXIOS_TIMEOUT_MS = 30_000;
 export const UNAUTHED_ERR_MSG = 'Please login (10001)';
@@ -12,7 +14,7 @@ export const OAUTH_STATE_COOKIE = "__Host-oauth_state";
 
 // `state` carries the callback redirect URI (used at token exchange) plus the
 // CSRF nonce. Defined here so the client encoder and server decoder never drift.
-export type OAuthState = { redirectUri: string; nonce?: string };
+export type OAuthState = { redirectUri: string; nonce?: string; returnPath?: string };
 
 export const encodeOAuthState = (state: OAuthState): string =>
   btoa(JSON.stringify(state));
